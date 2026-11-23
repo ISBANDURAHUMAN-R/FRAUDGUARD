@@ -1,0 +1,32 @@
+# Python Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Data Files & Databases (Prevent uploading large datasets & sensitive DBs)
+data/creditcard.csv
+data/*.csv
+data/*.zip
+data/*.parquet
+*.parquet
+*.db
+*.sqlite3
+data/fraudguard.db
+
+# Model binaries (keep git repo light, save artifacts locally)
+models/*.joblib
+!models/.gitkeep
+!data/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
