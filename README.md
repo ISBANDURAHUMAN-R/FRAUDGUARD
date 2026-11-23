@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="FRAUDGUARD Banner" width="100%">
+  <img src="https://github.com/user-attachments/assets/d29cc2f1-4225-490b-85c8-7735e4ac25d0" alt="FRAUDGUARD Banner" width="100%">
 </p>
 
 # ◈ FRAUDGUARD — AI-Powered Credit Card Fraud Detection Platform
@@ -63,7 +63,7 @@ flowchart TD
 - **Database & Persistence**: SQLite3 (Thread-Safe, Parameterized Queries)
 - **Quality Assurance**: Pytest (17 automated unit and integration tests)
 
-## 📊 Machine Learning Evaluation & Benchmarks
+## ⋆ Machine Learning Evaluation & Benchmarks
 Evaluated on an authentic held-out test split of **56,962 transactions** containing **98 confirmed fraud cases**:
 
 | Metric | Random Forest (Selected Model) | Logistic Regression (Baseline) | Performance Delta |
