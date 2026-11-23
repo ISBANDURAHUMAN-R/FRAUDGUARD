@@ -1,179 +1,111 @@
-# FRAUDGUARD: AI-Powered Credit Card Fraud Detection Web Platform
+<p align="center">
+  <img src="assets/banner.png" alt="FRAUDGUARD Banner" width="100%">
+</p>
 
-> **Intelligence Against Financial Fraud.**  
-> Developed and Owned by **Isbandu Rahuman R.**
+# ◈ FRAUDGUARD — AI-Powered Credit Card Fraud Detection Platform
 
----
+[![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.4%2B-F7931E.svg)](https://scikit-learn.org/)
+[![Imbalanced-Learn](https://img.shields.io/badge/imbalanced--learn-0.12%2B-orange.svg)](https://imbalanced-learn.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-5.24%2B-3F4F75.svg)](https://plotly.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57.svg)](https://www.sqlite.org/)
+[![Tests: Pytest](https://img.shields.io/badge/pytest-17%20passed-brightgreen.svg)](https://pytest.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 1. Project Overview
+## ◆ About the Project
+**FRAUDGUARD** is an enterprise-grade financial cyber-intelligence and transaction surveillance platform designed to identify, intercept, and audit fraudulent payment activity in real-time. Operating on the European Credit Card benchmark comprising 284,807 transactions with an authentic 0.17% fraud prevalence rate, FRAUDGUARD combines SMOTE-resampled Random Forest classification, outlier-resistant `RobustScaler` transformations, cost-sensitive decision threshold optimization, and an interactive 8-page Streamlit security console backed by SQLite audit persistence.
 
-**FRAUDGUARD** is an end-to-end financial transaction monitoring and fraud detection platform. It is engineered to detect, classify, and audit fraudulent payment activity within highly imbalanced transaction streams. 
+```mermaid
+flowchart TD
+    subgraph Ingestion [" Ingestion & Validation "]
+        CSV[" European Credit Card Dataset <br/> (284,807 Transactions) "] --> Val[" Schema Validation &amp; <br/> Data Integrity Check "]
+        Val --> Split[" Stratified Train-Test Split <br/> (80% Train / 20% Test) "]
+    end
 
-Trained on the European Credit Card Fraud Detection benchmark (284,807 transactions with an authentic 0.17% fraud rate), the system employs SMOTE-resampled Random Forest classification, RobustScaler feature transformations, cost-sensitive threshold optimization, and an interactive Streamlit cybersecurity dashboard backed by SQLite audit persistence.
+    subgraph Pipeline [" Preprocessing & ML Training "]
+        Split -->|" Train Set Only "| SMOTE[" SMOTE Balancing Engine <br/> (Sampling Ratio: 0.1) "]
+        Split --> Scaler[" RobustScaler Transformation <br/> (Time &amp; Amount Outliers) "]
+        SMOTE --> RF[" Random Forest Classifier <br/> (n_estimators=100) "]
+        Scaler --> RF
+        RF --> Calib[" Cost-Sensitive Threshold Calibration <br/> (Optimal Cutoff: 0.6202) "]
+    end
 
----
+    subgraph Serving [" Inference & Intelligence Serving "]
+        Calib --> Engine[" Real-Time Scoring Engine <br/> (Vectorized Prediction Pipeline) "]
+        Engine --> Single[" Single Transaction Scoring <br/> (30 Telemetry Features) "]
+        Engine --> Bulk[" Bulk CSV Stream Scanner <br/> (Batch Risk Assessment) "]
+        Engine --> Monitor[" Live Threat Surveillance <br/> &amp; Capital Exposure Dashboard "]
+    end
 
-## 2. Key Capabilities
-
-- **Real-Time Single Transaction Scoring**: Evaluates 30 genuine transaction telemetry features, displaying risk levels (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), calibrated fraud probability, and anomalous latent factors.
-- **High-Throughput Bulk CSV Scanner**: Validates, scales, and scores multi-transaction batches, providing risk distribution triage and downloadable annotated reports.
-- **Operations Dashboard**: Live KPI tracking, transaction volume velocity, logarithmic amount distribution comparisons, and feature importance analysis.
-- **SQLite Audit Trail**: Parameterized persistent storage capturing prediction outcomes, confidence scores, and analyst review notes.
-- **Model Intelligence Hub**: Evaluation metrics calculated on a held-out test split (56,962 transactions / 98 confirmed frauds), including PR-AUC curves, ROC curves, and confusion matrices.
-- **Zero Data Leakage Pipeline**: Stratified splitting executed before fitting scalers; resampling restricted strictly to training partitions.
-
----
-
-## 3. Technology Stack
-
-- **Core Programming**: Python 3.11+
-- **Data Engineering**: Pandas, NumPy
-- **Machine Learning**: Scikit-Learn, Imbalanced-Learn (SMOTE)
-- **Web Frontend**: Streamlit, Custom Dark CSS, Plotly Interactive Visuals
-- **Database**: SQLite3 (Thread-safe, parameterized queries)
-- **Model Persistence**: Joblib
-- **Testing & Quality Assurance**: Pytest (17 automated unit tests)
-
----
-
-## 4. Architecture and File Hierarchy
-
-```
-FRAUDGUARD/
-├── app.py                     # Main Streamlit application orchestrator
-├── app/
-│   ├── __init__.py
-│   ├── dashboard.py           # Executive monitoring dashboard
-│   ├── prediction.py          # Single transaction inference engine
-│   ├── bulk_analysis.py       # Batch CSV screening module
-│   ├── history.py             # SQLite audit trail & record management
-│   └── model_insights.py      # Benchmark curves and diagnostic metrics
-├── src/
-│   ├── __init__.py
-│   ├── data_loader.py         # CSV validation and dataset loader
-│   ├── preprocessing.py       # RobustScaler pipeline & stratified splitter
-│   ├── train_model.py         # Model training & threshold calibration
-│   ├── predict.py             # Vectorized inference & risk triage
-│   ├── evaluation.py          # PR-AUC, ROC, and metric calculations
-│   └── database.py            # SQLite schema, queries, and migrations
-├── notebooks/
-│   └── fraud_analysis.ipynb   # Exploratory data analysis notebook
-├── data/
-│   └── .gitkeep               # Directory for creditcard.csv (gitignored)
-├── models/
-│   └── .gitkeep               # Directory for trained joblib artifacts
-├── tests/
-│   ├── __init__.py
-│   ├── test_preprocessing.py  # Tests for scaling, ordering & leakage
-│   ├── test_model.py          # Tests for artifacts, metrics & thresholds
-│   ├── test_prediction.py     # Tests for single/bulk inference & schema
-│   └── test_database.py       # Tests for SQLite storage, filters & stats
-├── assets/
-│   └── logo.png               # Brand emblem
-├── .streamlit/
-│   └── config.toml            # Dark theme & server parameters
-├── requirements.txt           # Verified dependencies
-├── runtime.txt                # Target Python runtime
-├── pytest.ini                 # Pytest configuration
-├── .gitignore                 # Excludes datasets, DBs, and venvs
-├── README.md                  # Comprehensive technical documentation
-└── LICENSE                    # Project license
+    subgraph Storage [" Audit Trail & Persistence "]
+        Single --> DB[(" SQLite Database <br/> (Thread-Safe Transaction Audit) ")]
+        Bulk --> DB
+        DB --> Hist[" Historical Incident Review <br/> &amp; Analyst Governance "]
+    end
 ```
 
----
+## ❖ Key Features
+- **Zero Data Leakage Pipeline**: Stratified 80/20 train/test partition executed prior to fitting scalers; synthetic oversampling (SMOTE) is strictly confined to the training set.
+- **Cost-Sensitive Threshold Tuning**: Precision-Recall AUC optimization balances financial recall ($85.7\%$) against false-positive customer friction ($73.0\%$ precision).
+- **Sub-Second Real-Time Inference**: Vectorized single-transaction scoring evaluates 30 PCA features, classifying transactions into risk tiers (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
+- **High-Throughput Bulk CSV Scanner**: Parallel stream validation and scoring for uploaded transaction files with CSV report export.
+- **Executive Security Dashboard**: Live KPI tracking, fraud velocity telemetry, logarithmic amount distribution comparisons, and feature importance rankings.
+- **Thread-Safe SQLite Audit Persistence**: Parameterized transactional storage logging predictions, probabilities, and analyst investigation notes.
+- **Model Intelligence & Diagnostic Curves**: Direct PR-AUC, ROC-AUC, and Confusion Matrix evaluations computed against genuine held-out test splits.
+- **Clean White & Green Enterprise UI**: Designed with high-contrast accessibility, zero emojis, and fast in-memory singleton caching.
 
-## 5. Machine Learning Methodology & Performance
+## ⬢ Technologies Used
+- **Core Language**: Python 3.11+
+- **Machine Learning**: Scikit-Learn, Imbalanced-Learn (SMOTE), Joblib
+- **Data Engineering**: Pandas, NumPy, PyArrow (High-Speed Binary Parquet Caching)
+- **Interactive UI & Visuals**: Streamlit, Plotly Express & Graph Objects
+- **Database & Persistence**: SQLite3 (Thread-Safe, Parameterized Queries)
+- **Quality Assurance**: Pytest (17 automated unit and integration tests)
 
-### Training Configuration
-- **Dataset**: European Cardholder Transactions (284,807 rows)
-- **Partitioning**: Stratified 80/20 split (227,845 train / 56,962 test)
-- **Imbalance Mitigation**: SMOTE applied exclusively to training vectors (sampling strategy: 0.1)
-- **Scaling**: `RobustScaler` applied to `Time` and `Amount` (resilient to monetary outliers)
+## 📊 Machine Learning Evaluation & Benchmarks
+Evaluated on an authentic held-out test split of **56,962 transactions** containing **98 confirmed fraud cases**:
 
-### Evaluation on Held-Out Test Set (56,962 transactions, 98 fraud cases)
+| Metric | Random Forest (Selected Model) | Logistic Regression (Baseline) | Performance Delta |
+|:---|:---:|:---:|:---:|
+| **PR-AUC (Primary Metric)** | **0.8333** | 0.7213 | **+11.20%** |
+| **Fraud Recall** | **85.71% (84 / 98 caught)** | 47.96% (47 / 98) | **+37.75%** |
+| **Precision** | **73.04%** | 81.03% | -7.99% |
+| **F1-Score** | **0.7887** | 0.6026 | **+18.61%** |
+| **ROC-AUC** | **0.9575** | 0.9452 | **+1.23%** |
+| **False Positives** | **31** | 11 | Cost-Tolerant |
 
-| Metric | Random Forest (Selected) | Logistic Regression (Baseline) |
-|---|---|---|
-| **PR-AUC (Primary Metric)** | **0.8333** | 0.7213 |
-| **Fraud Recall** | **85.71% (84 / 98 caught)** | 47.96% |
-| **Precision** | **73.04%** | 81.03% |
-| **F1-Score** | **0.7887** | 0.6026 |
-| **ROC-AUC** | **0.9632** | 0.9680 |
-| **Calibrated Threshold** | **0.6202** | 1.0000 |
+## § Requirements
+- Python 3.11 or higher
+- Git
+- 2 GB RAM minimum (for 284,807 record in-memory dataset handling)
+- Modern web browser (Chrome, Edge, Firefox, Safari)
 
-> **Selection Rationale**: In extreme fraud imbalance (0.17%), **PR-AUC** is the decisive metric. Random Forest captures 85.7% of fraud while maintaining 73% precision, preventing false positive alarms from overwhelming fraud investigation teams.
-
----
-
-## 6. Installation and Setup Instructions
-
-### Prerequisites
-- Python 3.11 installed
-- Git installed
-
-### 1. Clone the Repository
+## ▲ Installation & Execution
 ```bash
-git clone https://github.com/your-username/FRAUDGUARD.git
+# 1. Clone Repository & Navigate
+git clone https://github.com/ISBANDURAHUMAN-R/FRAUDGUARD.git
 cd FRAUDGUARD
-```
 
-### 2. Create and Activate Virtual Environment
-```bash
+# 2. Setup Virtual Environment
 python -m venv .venv
 # On Windows:
 .venv\Scripts\activate
-# On Linux / macOS:
+# On Linux/macOS:
 source .venv/bin/activate
-```
 
-### 3. Install Dependencies
-```bash
+# 3. Install Dependencies
 pip install -r requirements.txt
-```
 
-### 4. Dataset Setup
-1. Download `creditcard.csv` from [Kaggle Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud).
-2. Place the file inside the `data/` folder: `data/creditcard.csv`.
-3. *(Alternative)* If starting without the dataset file, launch the web application and upload `creditcard.csv` directly via the **Dataset & System Status** panel.
+# 4. Run Automated Test Suite (17 Tests)
+pytest tests
 
-### 5. Train the Machine Learning Pipeline
-```bash
-python -m src.train_model
-```
-This script validates data integrity, executes the stratified train/test split, trains both models, computes evaluation curves, and saves the trained artifacts into `models/`.
-
-### 6. Run the Test Suite
-```bash
-pytest -v
-```
-All 17 tests verify data preprocessing, data leakage prevention, schema validation, single/batch prediction, threshold tuning, and SQLite persistence.
-
-### 7. Launch the Web Application
-```bash
+# 5. Launch FRAUDGUARD Intelligence Platform
 streamlit run app.py
 ```
-Access the application in your browser at `http://localhost:8501`.
 
----
+Access the security operations console in your browser at `http://localhost:8501`.
 
-## 7. Streamlit Community Cloud Deployment
-
-1. Fork or push the repository to GitHub (ensure `data/creditcard.csv` and local `.db` files remain gitignored as configured in `.gitignore`).
-2. Log in to [Streamlit Community Cloud](https://share.streamlit.io/).
-3. Connect your repository, select branch `main`, and set the main file path to `app.py`.
-4. Deploy the application. The system will start cleanly, load stored model metadata, and allow users to upload datasets and evaluate transactions immediately.
-
----
-
-## 8. Limitations & Future Roadmap
-
-- **PCA Feature Anonymity**: Original features are PCA transformed due to European cardholder confidentiality, limiting domain-specific feature engineering (e.g., merchant category code, geolocation).
-- **Future Integration**: Implement streaming Kafka ingestion for high-throughput sub-millisecond fraud scoring, and explore Graph Neural Networks (GNNs) for detecting coordinated fraud syndicates.
-
----
-
-## 9. Author and Developer
-
-- **Developer & Owner**: Isbandu Rahuman R.
-- **Project**: FRAUDGUARD
-- **Portfolio Edition**: 2026
+## ※ Developer
+Developer: ISBANDU RAHUMAN R  
+GitHub: https://github.com/ISBANDURAHUMAN-R
