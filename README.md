@@ -2,7 +2,7 @@
   <img src="https://github.com/user-attachments/assets/d29cc2f1-4225-490b-85c8-7735e4ac25d0" alt="FRAUDGUARD Banner" width="100%">
 </p>
 
-# ◈ FRAUDGUARD — AI-Powered Credit Card Fraud Detection Platform
+# ◈ FRAUDGUARD — AI Powered Credit Card Fraud Detection Platform
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
